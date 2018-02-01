@@ -1,0 +1,73 @@
+#pragma kernel computeMac
+#pragma kernel computePC
+
+// Particle's data
+struct Particle
+{
+	float3 position;
+	float3 velocity;
+	float3 color;
+	float mass;
+};
+
+// Particle's data, shared with the shader
+RWStructuredBuffer<Particle> particleBuffer;
+
+// Variables set from the CPU
+float e;
+float h;
+float bufSize;
+
+
+[numthreads(512, 1, 1)]
+void computeMac (uint3 id : SV_DispatchThreadID)
+{
+	float3 r, force;
+	float rL;
+
+	force = float3(0.0f, 0.0f, 0.0f);
+	
+	int i = id.x;
+	for (int j = 0; j < bufSize; j++) {
+		if (i != j) {
+			r = particleBuffer[j].position - particleBuffer[i].position; 
+			rL = sqrt(r.x*r.x + r.y*r.y + r.z*r.z);
+			force += r * particleBuffer[j].mass * particleBuffer[i].mass / pow(abs(rL*rL + e), 3.0f/2.0f);
+		}
+	}	
+    particleBuffer[i].velocity = particleBuffer[i].velocity + h * force/particleBuffer[i].mass;
+    particleBuffer[i].position = particleBuffer[i].position + h * particleBuffer[i].velocity;
+	
+	/*
+    int i = id.x;
+    float3 center = float3(0.0f, 0.0f, 0.0f);
+	r = center - particleBuffer[i].position; 
+	rL = sqrt(r.x*r.x + r.y*r.y +r.z*r.z);
+	force += r * 0.01f * particleBuffer[i].mass / pow(abs(rL*rL + e), 3.0f/2.0f);
+
+    particleBuffer[i].velocity = particleBuffer[i].velocity + h * force/particleBuffer[i].mass;
+    particleBuffer[i].position = particleBuffer[i].position + h * particleBuffer[i].velocity;
+    */
+}
+
+[numthreads(1024, 1, 1)]
+void computePC (uint3 id : SV_DispatchThreadID)
+{
+	float3 r, force;
+	float rL;
+
+	int i = id.x;
+	if (i < bufSize) {
+		force = float3(0.0f, 0.0f, 0.0f);
+		for (int j = 0; j < bufSize; j++) {
+			if (i != j) {
+				r = particleBuffer[j].position - particleBuffer[i].position; 
+				rL = sqrt(r.x*r.x + r.y*r.y + r.z*r.z);
+				force += r * particleBuffer[j].mass * particleBuffer[i].mass / pow(abs(rL*rL + e), 3.0f/2.0f);
+			}
+		}	
+	    particleBuffer[i].velocity = particleBuffer[i].velocity + h * force/particleBuffer[i].mass;
+	    particleBuffer[i].position = particleBuffer[i].position + h * particleBuffer[i].velocity;
+	}
+
+}

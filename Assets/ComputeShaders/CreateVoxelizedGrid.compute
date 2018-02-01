@@ -1,0 +1,35 @@
+﻿#pragma kernel computeMac
+#pragma kernel computePC
+
+// Particle's data
+struct Particle
+{
+	float3 position;
+	float3 velocity;
+	float3 color;
+	float mass;
+};
+
+struct MassOnly
+{
+	float mass;
+};
+
+// Particle's data, shared with the shader
+RWStructuredBuffer<Particle> particleBuffer;
+
+// Voxelized array
+RWStructuredBuffer<MassOnly> voxelizedGrid;
+
+// Variables set from the CPU
+int gridSize;
+
+[numthreads(512, 1, 1)]
+void computeMac (uint3 id : SV_DispatchThreadID)
+{
+	int elementsInCube = gridSize * gridSize * gridSize;
+	for (int i = 0; i < elementsInCube; i++) {
+		
+	}
+
+}
