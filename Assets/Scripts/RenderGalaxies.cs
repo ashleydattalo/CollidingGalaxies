@@ -5,6 +5,7 @@ using System.IO;
 
 public class RenderGalaxies : MonoBehaviour
 {
+	private bool useHomeScreen = true;
 	private bool isMac = false;
 	private struct Particle
 	{
@@ -25,6 +26,7 @@ public class RenderGalaxies : MonoBehaviour
 
 	private Particle[] particleArray;
 
+	private string galaxyName;
 	private GalaxyData galaxyData;
 	private float e, h;
 	private int particleCount;
@@ -51,14 +53,26 @@ public class RenderGalaxies : MonoBehaviour
 	void Start()
 	{
 		setStrings();
+		if (useHomeScreen) {
+			getHomeSceneInput();
+		}
 		initalizeGalaxyData();
 		setUpBuffers();
 		setUpShaderConstants();
 		setUpVR();
 	}
 
+	void getHomeSceneInput() {
+		GameObject savedData = GameObject.Find("savedData");
+		GameObject galaxy = savedData.transform.GetChild(0).gameObject;
+		if (galaxy != null) {
+			galaxyName = galaxy.name;
+		}
+		Destroy(savedData);
+	}
+
 	void setUpVR() {
-		simulate = true;
+		simulate = false;
 		camera = (GameObject) GameObject.Find("MainCamera");
 
 		cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
@@ -83,7 +97,16 @@ public class RenderGalaxies : MonoBehaviour
 	}
 
 	void initalizeGalaxyData() {
-		galaxyData = new GalaxyData();
+		if (useHomeScreen) {
+			galaxyData = new GalaxyData(galaxyName);
+			if (galaxyName == "galaxy100000") {
+				// galaxyData.setCustomNumStars(45000);
+			}
+		}
+		else {
+			galaxyData = new GalaxyData();
+	        galaxyData.use30k();
+		}
 		
 		if (isMac == true) {
 			galaxyData.setCustomNumStars(1000);
@@ -92,9 +115,9 @@ public class RenderGalaxies : MonoBehaviour
 			//galaxyData.setCustomNumStars(35000);
 		}
 		
-        galaxyData.use30k();
-		//galaxyData.use20000(); //doesn't work for some reason...
-		//galaxyData.use100000();
+
+		//galaxyData.use20000(); 
+		//galaxyData.use100000(); // frame SUCKS...
 		//galaxyData.useChainsaw();
         //galaxyData.useThreePassing(); 
         //galaxyData.useBunny();
@@ -157,9 +180,9 @@ public class RenderGalaxies : MonoBehaviour
 		rTouchPos = OVRInput.GetLocalControllerPosition(OVRInput.Controller.RTouch);
 
 		LeftIndexPressed = OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger);
-		LeftMiddlePressed = OVRInput.Get(OVRInput.Button.PrimaryHandTrigger);
+		// LeftMiddlePressed = OVRInput.Get(OVRInput.Button.PrimaryHandTrigger);
 		RightIndexPressed = OVRInput.Get(OVRInput.Button.SecondaryIndexTrigger);
-		RightMiddlePressed = OVRInput.Get(OVRInput.Button.SecondaryHandTrigger);
+		// RightMiddlePressed = OVRInput.Get(OVRInput.Button.SecondaryHandTrigger);
 
 		if (OVRInput.GetDown(OVRInput.Button.One)) {
 			simulate = !simulate;

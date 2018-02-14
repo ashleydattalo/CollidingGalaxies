@@ -34,5 +34,22 @@ public class todo : MonoBehaviour {
 	
 	*** Performance enhancement idea...
 	
+
+
+	Home Screen {
+		-start off with 5 boxes
+			-> use left/right on controller (or keyboard) to go in between them
+			-> if press 'a' (or something on keyboard) to select a scene
+				-> on press A, load a new scene
+				-> pass to new scene: Galaxy data string name 
+			-> if press back
+				-> do nothing
+	
+		newScene load:
+			-> if press back (middle trigger) then go back to home screen
+
+		
+
+	}
 */ 
 }

@@ -12,6 +12,8 @@ public class GalaxyData {
     private string ThreePassingGalaxies = "./Assets/GalaxyData/SuedasTextFiles/ThreePassingGalaxies.txt";
     private string bunny = "./Assets/GalaxyData/Objs/bunny.obj";
 
+    private string path = "./Assets/GalaxyData/SuedasTextFiles/";
+
     public struct Star
 	{
 		public Vector3 position;
@@ -41,6 +43,13 @@ public class GalaxyData {
 	public GalaxyData() {
 		useDefaultNumStars = true;
 		fileName = galaxy20000;
+		usePosOffset = false;
+		parseObjFile = false;
+	}
+
+	public GalaxyData(string inputName) {
+		useDefaultNumStars = true;
+		fileName = path + inputName + ".txt";
 		usePosOffset = false;
 		parseObjFile = false;
 	}
