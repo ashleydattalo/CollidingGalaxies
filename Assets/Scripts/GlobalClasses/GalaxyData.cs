@@ -40,11 +40,15 @@ public class GalaxyData {
 
 	private bool parseObjFile;
 
+	private Vector3 cameraPos;
+
 	public GalaxyData() {
 		useDefaultNumStars = true;
 		fileName = galaxy20000;
 		usePosOffset = false;
 		parseObjFile = false;
+		cameraPos = new Vector3(0.0f, 1.0f, -15.0f);
+		parseFile();
 	}
 
 	public GalaxyData(string inputName) {
@@ -52,7 +56,28 @@ public class GalaxyData {
 		fileName = path + inputName + ".txt";
 		usePosOffset = false;
 		parseObjFile = false;
+		setDataBasedOnName(inputName);
+		parseFile();
 	}
+
+	public void setDataBasedOnName(string inputName) {
+		if (inputName == "galaxy20000") {
+			cameraPos = new Vector3(-5.7f, 1.4f, -16.1f);
+		}
+		if (inputName == "30k_galaxy") {
+			cameraPos = new Vector3(0.5f, 0.3f, -5.7f);
+		}
+		if (inputName == "chainsawVsGalaxy") {
+			cameraPos = new Vector3(-3.0f, 1.0f, -11.2f);
+		}
+		if (inputName == "galaxy100000") {
+			cameraPos = new Vector3(-5.7f, 1.4f, -16.1f);
+			setCustomNumStars(35000);
+		}
+		if (inputName == "ThreePassingGalaxies") {
+			cameraPos = new Vector3(-2.3f, 0.0f, -11.4f);
+		}
+	} 
 
 	public void setPosOffset(Vector3 posOffset) {
 		this.posOffset = posOffset;
@@ -77,6 +102,10 @@ public class GalaxyData {
 
 	public float getH() {
 		return this.h;
+	}
+
+	public Vector3 getCameraPos() {
+		return this.cameraPos;
 	}
 
 	public void parseFile() {

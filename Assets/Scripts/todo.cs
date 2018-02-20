@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,11 +7,11 @@ public class todo : MonoBehaviour {
 /* 	This contains a file with my to do list for this project:
 
 	-Add home screen
-		-> allow user to select which of sueda's simulations to watch 
+		-> allow user to select which of sueda's simulations to watch #
 			-(by picture on a cube or something)
 		-> allow user to select an empty scene where they can just draw galaxies
+		-> fix calcMovement class (or write another simple one)
 
-		
 	-In simulation:
 		-> allow user to change star color, star mass, start size?
 		-> allow user change input method: 
@@ -48,7 +48,18 @@ public class todo : MonoBehaviour {
 		newScene load:
 			-> if press back (middle trigger) then go back to home screen
 
-		
+	
+
+	Monday:
+	-switch between option using joypad
+	-automatically start simulation, in the place that gives the best view
+	-on home screen add fog and darken skybox
+	-add music
+		-> sound on diff clicks
+		-> general music playing
+	-cool way of showing which galaxy is currently being clicked
+
+	*delete enough stuff so that I can use unity cloud version control again
 
 	}
 */ 

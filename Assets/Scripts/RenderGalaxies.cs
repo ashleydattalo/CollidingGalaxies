@@ -52,6 +52,7 @@ public class RenderGalaxies : MonoBehaviour
 
 	void Start()
 	{
+		camera = (GameObject) GameObject.Find("CameraParent");
 		setStrings();
 		if (useHomeScreen) {
 			getHomeSceneInput();
@@ -60,28 +61,6 @@ public class RenderGalaxies : MonoBehaviour
 		setUpBuffers();
 		setUpShaderConstants();
 		setUpVR();
-	}
-
-	void getHomeSceneInput() {
-		GameObject savedData = GameObject.Find("savedData");
-		GameObject galaxy = savedData.transform.GetChild(0).gameObject;
-		if (galaxy != null) {
-			galaxyName = galaxy.name;
-		}
-		Destroy(savedData);
-	}
-
-	void setUpVR() {
-		simulate = false;
-		camera = (GameObject) GameObject.Find("MainCamera");
-
-		cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        cube.transform.position = new Vector3(0.0f, 0.0f, 0.0f);
-        cube.transform.localScale -= new Vector3(0.95f, 0.95f, 0.95f);
-
-        pointer = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-        pointer.transform.position = new Vector3(0.0f, 0.0f, 0.0f);
-        pointer.transform.localScale -= new Vector3(0.995f, 0.995f, 0.995f);
 	}
 
 	void setStrings() {
@@ -96,11 +75,20 @@ public class RenderGalaxies : MonoBehaviour
 		}
 	}
 
+	void getHomeSceneInput() {
+		GameObject savedData = GameObject.Find("savedData");
+		GameObject galaxy = savedData.transform.GetChild(0).gameObject;
+		if (galaxy != null) {
+			galaxyName = galaxy.name;
+		}
+		Destroy(savedData);
+	}
+
 	void initalizeGalaxyData() {
 		if (useHomeScreen) {
 			galaxyData = new GalaxyData(galaxyName);
 			if (galaxyName == "galaxy100000") {
-				// galaxyData.setCustomNumStars(45000);
+				galaxyData.setCustomNumStars(35000);
 			}
 		}
 		else {
@@ -108,21 +96,23 @@ public class RenderGalaxies : MonoBehaviour
 	        galaxyData.use30k();
 		}
 		
-		if (isMac == true) {
-			galaxyData.setCustomNumStars(1000);
-		}
-		else {
-			//galaxyData.setCustomNumStars(35000);
-		}
-		
+		//Delete this maybe:
+		{	
+			if (isMac == true) {
+				galaxyData.setCustomNumStars(1000);
+			}
+			else {
+				//galaxyData.setCustomNumStars(35000);
+			}
 
-		//galaxyData.use20000(); 
-		//galaxyData.use100000(); // frame SUCKS...
-		//galaxyData.useChainsaw();
-        //galaxyData.useThreePassing(); 
-        //galaxyData.useBunny();
+			//galaxyData.use20000(); 
+			//galaxyData.use100000(); // framerate SUCKS...
+			//galaxyData.useChainsaw();
+	        //galaxyData.useThreePassing(); 
+	        //galaxyData.useBunny();
+		}
 
-        galaxyData.parseFile(); 
+		camera.transform.position = galaxyData.getCameraPos();
 		e = galaxyData.getE();
 		h = galaxyData.getH();
 		particleCount = galaxyData.getNumStars();
@@ -167,12 +157,28 @@ public class RenderGalaxies : MonoBehaviour
         computeShader.SetFloat("bufSize", particleCount);
 	}
 
+	void setUpVR() {
+		simulate = true;
+
+		cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        cube.transform.position = new Vector3(0.0f, 0.0f, 0.0f);
+        cube.transform.localScale -= new Vector3(0.95f, 0.95f, 0.95f);
+
+        pointer = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        pointer.transform.position = new Vector3(0.0f, 0.0f, 0.0f);
+        pointer.transform.localScale -= new Vector3(0.995f, 0.995f, 0.995f);
+	}
+
+
+
+
 	void Update() {
 		GetVRInput();
 		ProcessVRInput();
 		if (simulate) {
 			ComputeStarMovement();
 		}
+		Debug.Log(camera.transform.position);
 	}
 
 	void GetVRInput() {
