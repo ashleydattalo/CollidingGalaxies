@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class HomeScreen : MonoBehaviour {
 	string[] galaxyOptionNames = new string[] {
@@ -213,5 +214,4 @@ public class HomeScreen : MonoBehaviour {
 		}
         galaxyOptions[i].transform.localScale += new Vector3(1.0f, 1.0f, 1.0f);
 	}
-
 }

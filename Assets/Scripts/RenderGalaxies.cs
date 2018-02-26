@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using System.IO;
 
 public class RenderGalaxies : MonoBehaviour
@@ -33,6 +34,8 @@ public class RenderGalaxies : MonoBehaviour
 	private int lastParticleIndex;
 	private int EXTRA_PARTICLES = 15000;
 
+	private float starMass = 5.0f;
+
 	private string bufferName;
 	private string kernelName;
 
@@ -61,6 +64,8 @@ public class RenderGalaxies : MonoBehaviour
 		setUpBuffers();
 		setUpShaderConstants();
 		setUpVR();
+
+		setUpMenu();
 	}
 
 	void setStrings() {
@@ -87,9 +92,6 @@ public class RenderGalaxies : MonoBehaviour
 	void initalizeGalaxyData() {
 		if (useHomeScreen) {
 			galaxyData = new GalaxyData(galaxyName);
-			if (galaxyName == "galaxy100000") {
-				galaxyData.setCustomNumStars(35000);
-			}
 		}
 		else {
 			galaxyData = new GalaxyData();
@@ -181,17 +183,40 @@ public class RenderGalaxies : MonoBehaviour
 		Debug.Log(camera.transform.position);
 	}
 
+	bool PrevLeftIndexPressed;
+	bool PrevLeftMiddlePressed;
+	bool showingMenu = false;
 	void GetVRInput() {
 		lTouchPos = OVRInput.GetLocalControllerPosition(OVRInput.Controller.LTouch);
 		rTouchPos = OVRInput.GetLocalControllerPosition(OVRInput.Controller.RTouch);
 
+		PrevLeftIndexPressed = LeftIndexPressed;
+		PrevLeftMiddlePressed = LeftMiddlePressed;
+
 		LeftIndexPressed = OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger);
-		// LeftMiddlePressed = OVRInput.Get(OVRInput.Button.PrimaryHandTrigger);
+		LeftMiddlePressed = OVRInput.Get(OVRInput.Button.PrimaryHandTrigger);
 		RightIndexPressed = OVRInput.Get(OVRInput.Button.SecondaryIndexTrigger);
 		// RightMiddlePressed = OVRInput.Get(OVRInput.Button.SecondaryHandTrigger);
 
+
+		// move to Process VR input
+
 		if (OVRInput.GetDown(OVRInput.Button.One)) {
 			simulate = !simulate;
+		}
+
+		if (LeftIndexPressed && !PrevLeftIndexPressed) {
+			showingMenu = !showingMenu;
+		}
+		if (showingMenu) {
+			ShowMenu();
+		}
+		else {
+			HideMenu();
+		}
+
+		if (LeftMiddlePressed) {
+			ChangeStarMass();
 		}
 	}
 
@@ -209,7 +234,7 @@ public class RenderGalaxies : MonoBehaviour
 				particleToAdd.velocity = new Vector3(0.0f, 0.0f, 0.0f);
 				particleToAdd.color = scale.getRainbow((float)(particlesAdded%100)) + scale.getRainbow((float)(particlesAdded%100));
 				// particleToAdd.color = new Vector3(1.0f, 1.0f, 0.5f);
-				particleToAdd.mass = 0.001f;
+				particleToAdd.mass = starMass;
 				particlesAdded++;
 
 				AddParticleToBuffer(particleToAdd);
@@ -239,5 +264,61 @@ public class RenderGalaxies : MonoBehaviour
 			particleBuffer.Release();
 		}
 		Debug.Log("particlesAdded: " + particlesAdded);
-	}	
+	}
+
+	GameObject message;
+
+	void setUpMenu() {
+		simulate = false;
+		message = new GameObject("StarMassMessage");
+		message.transform.position =  camera.transform.position + camera.transform.forward * 15.0f;
+		message.transform.rotation = this.transform.rotation;
+		addTextComponent(message, "Star Mass: " + starMass);
+	}
+	void ShowMenu() {
+		simulate = false;
+		message.transform.position =  camera.transform.position + camera.transform.forward * 15.0f;
+		//message.transform.rotation = this.transform.rotation;
+		GameObject messageText = message.transform.GetChild(0).gameObject;
+		messageText.GetComponent<Text>().enabled = true;
+	}
+	void HideMenu() {
+		//simulate = true;
+		GameObject messageText = message.transform.GetChild(0).gameObject;
+		messageText.GetComponent<Text>().enabled = false;
+	}
+	void ChangeStarMass() {
+		starMass += 1.0f;
+		GameObject messageText = message.transform.GetChild(0).gameObject;
+		messageText.GetComponent<Text>().text = "Star Mass: " + starMass;
+		//addTextComponent(message, "Star Mass: " + starMass);
+	}
+
+	void addTextComponent(GameObject go, string text) {
+		GameObject child = new GameObject();
+		child.name = "Text";
+		child.transform.parent = go.transform;
+
+		Canvas canvas = child.AddComponent<Canvas>();
+		canvas.renderMode = RenderMode.WorldSpace;
+		CanvasScaler cs = child.AddComponent<CanvasScaler>();
+		cs.scaleFactor = 20.0f;
+		cs.dynamicPixelsPerUnit = 20.0f;
+
+		Text t = child.AddComponent<Text>();
+		t.GetComponent<RectTransform>().sizeDelta = new Vector2 (1, 1);
+		Vector3 textPos = go.transform.position;
+		Quaternion textRot = go.transform.rotation;
+		t.GetComponent<RectTransform>().position = textPos + new Vector3(0, 2f, 0);
+		t.GetComponent<RectTransform>().rotation = textRot;
+		t.alignment = TextAnchor.MiddleCenter;
+		t.horizontalOverflow = HorizontalWrapMode.Overflow;
+		t.verticalOverflow = VerticalWrapMode.Overflow;
+		Font ArialFont = (Font)Resources.GetBuiltinResource (typeof(Font), "Arial.ttf");
+		t.font = ArialFont;
+		t.fontSize = 1;
+		t.text = text;
+		t.enabled = true;
+		t.color = Color.white;
+	}
 }
