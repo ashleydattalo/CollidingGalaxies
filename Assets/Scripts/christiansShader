@@ -1,5 +1,6 @@
 #pragma kernel computeMac
 #pragma kernel computePC
+#pragma kernel computeFillRasterBuffs
 
 // Particle's data
 struct Particle
@@ -8,15 +9,30 @@ struct Particle
 	float3 velocity;
 	float3 color;
 	float mass;
+	int next;
 };
 
 // Particle's data, shared with the shader
 RWStructuredBuffer<Particle> particleBuffer;
 
+
+struct RasterElement
+	{
+		public int firststar;
+		public int actualstar;
+		public Vector3 position;
+		public float mass;
+		int count;
+	}
+RWStructuredBuffer<RasterElement> rasterBuffer;
+
+
 // Variables set from the CPU
 float e;
 float h;
 float bufSize;
+float3 range;
+float3 vmin;
 
 
 [numthreads(512, 1, 1)]
@@ -57,7 +73,7 @@ void computePC (uint3 id : SV_DispatchThreadID,int3 groupID : SV_GroupID)
 	float rL;
 
 	int i = id.x + groupID.x*1024;
-	//if (i < bufSize) {
+	if (i < bufSize) {
 		force = float3(0.0f, 0.0f, 0.0f);
 		for (int j = 0; j < bufSize; j++) {
 			if (i != j) {
@@ -68,6 +84,29 @@ void computePC (uint3 id : SV_DispatchThreadID,int3 groupID : SV_GroupID)
 		}	
 	    particleBuffer[i].velocity = particleBuffer[i].velocity + h * force/particleBuffer[i].mass;
 	    particleBuffer[i].position = particleBuffer[i].position + h * particleBuffer[i].velocity;
-	//}
+	}
+
+}
+
+
+[numthreads(1024, 1, 1)]
+void computeFillRasterBuffs (uint3 id : SV_DispatchThreadID)
+{
+	float3 r, force;
+	float rL;
+
+	int i = id.x;
+	if (i < bufSize) {
+		force = float3(0.0f, 0.0f, 0.0f);
+		for (int j = 0; j < bufSize; j++) {
+			if (i != j) {
+				r = particleBuffer[j].position - particleBuffer[i].position; 
+				rL = sqrt(r.x*r.x + r.y*r.y + r.z*r.z);
+				force += r * particleBuffer[j].mass * particleBuffer[i].mass / pow(abs(rL*rL + e), 3.0f/2.0f);
+			}
+		}	
+	    particleBuffer[i].velocity = particleBuffer[i].velocity + h * force/particleBuffer[i].mass;
+	    particleBuffer[i].position = particleBuffer[i].position + h * particleBuffer[i].velocity;
+	}
 
 }

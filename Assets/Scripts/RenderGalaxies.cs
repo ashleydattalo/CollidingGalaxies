@@ -175,6 +175,7 @@ public class RenderGalaxies : MonoBehaviour
 
 
 	void Update() {
+		
 		GetVRInput();
 		ProcessVRInput();
 		if (simulate) {
@@ -185,6 +186,7 @@ public class RenderGalaxies : MonoBehaviour
 
 	bool PrevLeftIndexPressed;
 	bool PrevLeftMiddlePressed;
+	bool xPressed, yPressed, aPressed;
 	bool showingMenu = false;
 	void GetVRInput() {
 		lTouchPos = OVRInput.GetLocalControllerPosition(OVRInput.Controller.LTouch);
@@ -199,9 +201,12 @@ public class RenderGalaxies : MonoBehaviour
 		// RightMiddlePressed = OVRInput.Get(OVRInput.Button.SecondaryHandTrigger);
 
 
-		// move to Process VR input
+		aPressed = OVRInput.GetDown(OVRInput.Button.One);
+		xPressed = OVRInput.Get(OVRInput.RawButton.X);
+		yPressed = OVRInput.Get(OVRInput.RawButton.Y);
 
-		if (OVRInput.GetDown(OVRInput.Button.One)) {
+		// move to Process VR input
+		if (aPressed) {
 			simulate = !simulate;
 		}
 
@@ -215,8 +220,11 @@ public class RenderGalaxies : MonoBehaviour
 			HideMenu();
 		}
 
-		if (LeftMiddlePressed) {
-			ChangeStarMass();
+		if (xPressed) {
+			ChangeStarMass(1.0f);
+		}
+		if (yPressed) {
+			ChangeStarMass(-1.0f);
 		}
 	}
 
@@ -269,7 +277,7 @@ public class RenderGalaxies : MonoBehaviour
 	GameObject message;
 
 	void setUpMenu() {
-		simulate = false;
+		// simulate = false;
 		message = new GameObject("StarMassMessage");
 		message.transform.position =  camera.transform.position + camera.transform.forward * 15.0f;
 		message.transform.rotation = this.transform.rotation;
@@ -287,8 +295,8 @@ public class RenderGalaxies : MonoBehaviour
 		GameObject messageText = message.transform.GetChild(0).gameObject;
 		messageText.GetComponent<Text>().enabled = false;
 	}
-	void ChangeStarMass() {
-		starMass += 1.0f;
+	void ChangeStarMass(float alterBy) {
+		starMass += alterBy;
 		GameObject messageText = message.transform.GetChild(0).gameObject;
 		messageText.GetComponent<Text>().text = "Star Mass: " + starMass;
 		//addTextComponent(message, "Star Mass: " + starMass);
