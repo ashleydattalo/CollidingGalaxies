@@ -54,7 +54,7 @@ public class todo : MonoBehaviour {
 			-> general music playing
 		-cool way of showing which galaxy is currently being clicked
 
-		*delete enough stuff so that I can use unity cloud version control again
+		*delete enough stuff so that I can use unity cloud version control again (Done)
 		
 		
 	}

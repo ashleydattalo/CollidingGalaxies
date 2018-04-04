@@ -64,6 +64,7 @@
      <None Include="Assets\GalaxyData\SuedasTextFiles\chainsawVsGalaxy 2.txt" />
      <None Include="Assets\OVR\Editor\AndroidManifest.OVRSubmission.xml" />
      <None Include="Assets\Shaders\DrawParticles.shader" />
+     <None Include="Assets\LazyFog\Shaders\LazyFog.shader" />
      <None Include="Assets\OVR\Shaders\OVRColorRampAlpha.shader" />
      <None Include="Assets\GalaxyData\SuedasTextFiles\chainsawVsGalaxy.txt" />
      <None Include="Assets\OVR\Resources\Cubemap Blit.shader" />
@@ -75,7 +76,9 @@
      <None Include="Assets\OVR\Resources\OVRMRCameraFrameLit.shader" />
      <None Include="Assets\OVR\Resources\Underlay Transparent Occluder.shader" />
      <None Include="Assets\OVR\Resources\Texture2D Blit.shader" />
+     <None Include="Assets\LazyFog\Instructions.txt" />
      <None Include="Assets\GalaxyData\SuedasTextFiles\galaxy100000.txt" />
+     <None Include="Assets\GalaxyData\SuedasTextFiles\galaxy_small.txt" />
      <None Include="Assets\OVR\Resources\OVRMRCameraFrame.shader" />
      <None Include="Assets\OVR\Resources\OVRMRClipPlane.shader" />
      <None Include="Assets\GalaxyData\SuedasTextFiles\galaxy20000.txt" />

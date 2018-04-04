@@ -51,6 +51,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\LazyFog\Scripts\exampleSceneScript.cs" />
      <Compile Include="Assets\OVR\Scripts\Composition\OVRCameraComposition.cs" />
      <Compile Include="Assets\OVR\Scripts\Composition\OVRComposition.cs" />
      <Compile Include="Assets\OVR\Scripts\Composition\OVRCompositionUtil.cs" />
@@ -93,10 +94,14 @@
      <Compile Include="Assets\OVR\Scripts\Util\OVRSceneSampleController.cs" />
      <Compile Include="Assets\OVR\Scripts\Util\OVRScreenFade.cs" />
      <Compile Include="Assets\OVR\Scripts\Util\OVRWaitCursor.cs" />
+     <Compile Include="Assets\Scripts\Christians.cs" />
      <Compile Include="Assets\Scripts\generateCubes.cs" />
+     <Compile Include="Assets\Scripts\GlobalClasses\CalcMovement.cs" />
      <Compile Include="Assets\Scripts\GlobalClasses\CameraMovement.cs" />
      <Compile Include="Assets\Scripts\GlobalClasses\GalaxyData.cs" />
      <Compile Include="Assets\Scripts\GlobalClasses\Scale.cs" />
+     <Compile Include="Assets\Scripts\GoHome.cs" />
+     <Compile Include="Assets\Scripts\HomeScreen.cs" />
      <Compile Include="Assets\Scripts\ParticleInput.cs" />
      <Compile Include="Assets\Scripts\RenderGalaxies.cs" />
      <Compile Include="Assets\Scripts\ThrowingParticles.cs" />
@@ -107,6 +112,7 @@
      <None Include="Assets\GalaxyData\SuedasTextFiles\chainsawVsGalaxy 2.txt" />
      <None Include="Assets\OVR\Editor\AndroidManifest.OVRSubmission.xml" />
      <None Include="Assets\Shaders\DrawParticles.shader" />
+     <None Include="Assets\LazyFog\Shaders\LazyFog.shader" />
      <None Include="Assets\OVR\Shaders\OVRColorRampAlpha.shader" />
      <None Include="Assets\GalaxyData\SuedasTextFiles\chainsawVsGalaxy.txt" />
      <None Include="Assets\OVR\Resources\Cubemap Blit.shader" />
@@ -118,7 +124,9 @@
      <None Include="Assets\OVR\Resources\OVRMRCameraFrameLit.shader" />
      <None Include="Assets\OVR\Resources\Underlay Transparent Occluder.shader" />
      <None Include="Assets\OVR\Resources\Texture2D Blit.shader" />
+     <None Include="Assets\LazyFog\Instructions.txt" />
      <None Include="Assets\GalaxyData\SuedasTextFiles\galaxy100000.txt" />
+     <None Include="Assets\GalaxyData\SuedasTextFiles\galaxy_small.txt" />
      <None Include="Assets\OVR\Resources\OVRMRCameraFrame.shader" />
      <None Include="Assets\OVR\Resources\OVRMRClipPlane.shader" />
      <None Include="Assets\GalaxyData\SuedasTextFiles\galaxy20000.txt" />
