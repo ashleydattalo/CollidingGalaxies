@@ -56,8 +56,8 @@ void computePC (uint3 id : SV_DispatchThreadID,int3 groupID : SV_GroupID)
 	float3 r, force;
 	float rL;
 
-	int i = id.x + groupID.x*1024;
-	//if (i < bufSize) {
+	int i = id.x;// + groupID.x*1024;
+	if (i < bufSize) {
 		force = float3(0.0f, 0.0f, 0.0f);
 		for (int j = 0; j < bufSize; j++) {
 			if (i != j) {
@@ -68,6 +68,6 @@ void computePC (uint3 id : SV_DispatchThreadID,int3 groupID : SV_GroupID)
 		}	
 	    particleBuffer[i].velocity = particleBuffer[i].velocity + h * force/particleBuffer[i].mass;
 	    particleBuffer[i].position = particleBuffer[i].position + h * particleBuffer[i].velocity;
-	//}
+	}
 
 }

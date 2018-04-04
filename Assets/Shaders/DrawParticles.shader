@@ -28,6 +28,7 @@ Shader "DrawParticles"
 			{
 				float4 position : SV_POSITION;
 				float4 color : COLOR;
+				float size: PSIZE;
 			};
 			
 			// Particle's data, shared with the compute shader
@@ -50,6 +51,8 @@ Shader "DrawParticles"
 				o.position = UnityObjectToClipPos(float4(particleBuffer[instance_id].position, 1.0f));
 
 				//o.position.xyz += 5.0f;
+
+				o.size = 4000.0f;
 
 				return o;
 			}

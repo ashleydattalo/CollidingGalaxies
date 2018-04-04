@@ -206,7 +206,7 @@ public class RenderGalaxies : MonoBehaviour
 		yPressed = OVRInput.Get(OVRInput.RawButton.Y);
 
 		// move to Process VR input
-		if (aPressed) {
+		if (aPressed || Input.GetKeyDown("space")) {
 			simulate = !simulate;
 		}
 
