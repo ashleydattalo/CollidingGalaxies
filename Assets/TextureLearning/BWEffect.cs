@@ -36,28 +36,30 @@ public class BWEffect : MonoBehaviour {
 			Graphics.Blit (source, destination);
 		 	return;
 	 	}
-	 	int iterations = 16;
-	 	int width = source.width / 2;
-		int height = source.height / 2;
-		RenderTextureFormat format = source.format;
+	 	material.SetFloat("_bwBlend", intensity);
+ Graphics.Blit (source, destination, material);
+	 // 	int iterations = 16;
+	 // 	int width = source.width; // /2;
+		// int height = source.height; // /2;
+		// RenderTextureFormat format = source.format;
 
-	 	RenderTexture currentDestination = RenderTexture.GetTemporary(width, height, 0, format);
+	 // 	RenderTexture currentDestination = RenderTexture.GetTemporary(width, height, 0, format);
 
-	 	Graphics.Blit(source, currentDestination);
-		RenderTexture currentSource = currentDestination;
-		Graphics.Blit(currentSource, destination);
-		RenderTexture.ReleaseTemporary(currentSource);
+	 // 	Graphics.Blit(source, currentDestination);
+		// RenderTexture currentSource = currentDestination;
+		// Graphics.Blit(currentSource, destination);
+		// RenderTexture.ReleaseTemporary(currentSource);
 		
 
-		for (int i = 1; i < iterations; i++) {
-			width /= 2;
-			height /= 2;
-			currentDestination = RenderTexture.GetTemporary(width, height, 0, format);
-			Graphics.Blit(currentSource, currentDestination);
-			RenderTexture.ReleaseTemporary(currentSource);
-			currentSource = currentDestination;
-		}
+		// for (int i = 1; i < iterations; i++) {
+		// 	width /= 2;
+		// 	height /= 2;
+		// 	currentDestination = RenderTexture.GetTemporary(width, height, 0, format);
+		// 	Graphics.Blit(currentSource, currentDestination);
+		// 	RenderTexture.ReleaseTemporary(currentSource);
+		// 	currentSource = currentDestination;
+		// }
 
-		Graphics.Blit(currentSource, destination);
+		// Graphics.Blit(currentSource, destination);
 	}
 }
